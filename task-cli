@@ -1,0 +1,22 @@
+#!C:\laragon\bin\php\php-8.3.10-Win32-vs16-x64\php.exe
+<?php
+
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+require 'App.php';
+
+$app = new App();
+
+$message = match ($argv[1] ?? null) {
+    'add' => $app->addTask($argv),
+    'list' => $app->listTasks($argv),
+    'update' => $app->updateTask($argv[2] ?? null, $argv[3] ?? null),
+    'delete' => $app->deleteTask($argv),
+    'mark-in-progress' => $app->updateTask($argv[2], null, 'in-progress'),
+    'mark-done' => $app->updateTask($argv[2], null, 'done'),
+    default => $app->help(),
+};
+
+echo $message;
